@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>User Account Control</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* 背景をデスクトップっぽく暗くする */
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            font-family: "Segoe UI", "Meiryo", sans-serif;
+            overflow: hidden;
+        }
+
+        .uac-dialog {
+            width: 450px;
+            background: #f3f3f3;
+            border-radius: 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: pop 0.2s ease-out;
+        }
+
+        @keyframes pop {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .header {
+            padding: 24px 24px 10px;
+        }
+
+        .uac-title {
+            display: flex;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .uac-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+        }
+
+        .content {
+            padding: 0 24px 24px;
+        }
+
+        .question {
+            font-size: 15px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .app-info {
+            display: flex;
+            align-items: flex-start;
+            background: #fff;
+            padding: 12px;
+            border: 1px solid #e5e5e5;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .app-icon {
+            font-size: 32px;
+            margin-right: 15px;
+        }
+
+        .app-details {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .app-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .password-section {
+            margin-top: 20px;
+        }
+
+        .admin-user {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .user-icon {
+            width: 20px;
+            height: 20px;
+            background: #0078d4;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #858585;
+            border-bottom: 2px solid #0067c0;
+            outline: none;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: #eeeeee;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        button {
+            padding: 6px 32px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .btn-yes {
+            background: #0067c0;
+            color: white;
+            border: none;
+        }
+
+        .btn-yes:hover { background: #005aab; }
+
+        .btn-no {
+            background: #ffffff;
+            color: black;
+            border: 1px solid #cccccc;
+        }
+
+        .btn-no:hover { background: #f5f5f5; }
+
+        .details-link {
+            font-size: 12px;
+            color: #0067c0;
+            text-decoration: none;
+            margin-top: 15px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="uac-dialog">
+    <div class="header">
+        <div class="uac-title">
+            <span class="uac-icon">🛡️</span>
+            ユーザー アカウント制御
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="question">このアプリがデバイスに変更を加えることを許可しますか?</div>
+        
+        <div class="app-info">
+            <div class="app-icon">🃏</div>
+            <div class="app-details">
+                <div class="app-name">Joke Generator v2.0</div>
+                <div>確認済みの発行元: あなたの遊び心</div>
+                <div>ファイルの入手先: この会話のノリ</div>
+            </div>
+        </div>
+
+        <div class="password-section">
+            <div class="admin-user">
+                <div class="user-icon"></div>
+                <strong>Administrator</strong>
+            </div>
+            <input type="password" placeholder="パスワードを入力してください">
+        </div>
+
+        <a href="#" class="details-link">詳細を表示</a>
+    </div>
+
+    <div class="footer">
+        <button class="btn-yes" onclick="alert('承認されました！さあ、次のジョークへ進みましょう。')">はい</button>
+        <button class="btn-no" onclick="alert('拒否されましたが、口答え禁止なので無効です。')">いいえ</button>
+    </div>
+</div>
+
+</body>
+</html>
