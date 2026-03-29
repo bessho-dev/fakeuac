@@ -2,197 +2,137 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>User Account Control</title>
     <style>
+        :root {
+            --win-blue: #0067c0;
+            --win-bg: #f3f3f3;
+            --win-border: #e5e5e5;
+        }
         body {
             margin: 0;
             height: 100vh;
+            background: rgba(0, 0, 0, 0.45); /* デスクトップの暗転 */
+            backdrop-filter: blur(12px);    /* 背面のボカシ */
             display: flex;
             align-items: center;
             justify-content: center;
-            /* 背景をデスクトップっぽく暗くする */
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
             font-family: "Segoe UI", "Meiryo", sans-serif;
-            overflow: hidden;
+            user-select: none;
         }
-
-        .uac-dialog {
-            width: 450px;
-            background: #f3f3f3;
+        .uac-window {
+            width: 440px;
+            background: var(--win-bg);
             border-radius: 8px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            overflow: hidden;
-            animation: pop 0.2s ease-out;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: uac-appear 0.15s cubic-bezier(0, 0, 0, 1);
         }
-
-        @keyframes pop {
-            from { transform: scale(0.95); opacity: 0; }
+        @keyframes uac-appear {
+            from { transform: scale(1.05); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-
         .header {
-            padding: 24px 24px 10px;
-        }
-
-        .uac-title {
+            padding: 20px 24px 8px;
             display: flex;
             align-items: center;
-            font-size: 20px;
+            font-size: 13px;
+            color: #333;
+        }
+        .shield-icon { margin-right: 12px; font-size: 18px; }
+        .main-content { padding: 0 24px 24px; }
+        .headline {
+            font-size: 18px;
             font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 20px;
             color: #000;
         }
-
-        .uac-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-        }
-
-        .content {
-            padding: 0 24px 24px;
-        }
-
-        .question {
-            font-size: 15px;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-
-        .app-info {
+        .app-card {
             display: flex;
-            align-items: flex-start;
             background: #fff;
             padding: 12px;
-            border: 1px solid #e5e5e5;
+            border: 1px solid var(--win-border);
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
-
-        .app-icon {
-            font-size: 32px;
-            margin-right: 15px;
-        }
-
-        .app-details {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .app-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #000;
-            margin-bottom: 4px;
-        }
-
-        .password-section {
-            margin-top: 20px;
-        }
-
-        .admin-user {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .user-icon {
-            width: 20px;
-            height: 20px;
-            background: #0078d4;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
+        .app-icon { font-size: 32px; margin-right: 16px; }
+        .app-text { font-size: 12px; line-height: 1.5; color: #555; }
+        .app-name { font-size: 14px; font-weight: 600; color: #000; }
+        
+        .auth-section { margin-top: 16px; }
+        .user-info { display: flex; align-items: center; margin-bottom: 8px; font-size: 14px; }
+        .avatar { width: 24px; height: 24px; background: var(--win-blue); border-radius: 50%; margin-right: 10px; }
+        
+        .input-wrapper { position: relative; }
         input[type="password"] {
             width: 100%;
-            padding: 8px;
+            padding: 7px 10px;
             border: 1px solid #858585;
-            border-bottom: 2px solid #0067c0;
+            border-bottom: 2px solid var(--win-blue);
+            background: #fff;
             outline: none;
             box-sizing: border-box;
+            border-radius: 4px 4px 0 0;
             font-size: 14px;
         }
-
+        .more-choices {
+            display: block;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--win-blue);
+            text-decoration: none;
+        }
         .footer {
-            background: #eeeeee;
+            background: #eee;
             padding: 16px 24px;
             display: flex;
             justify-content: flex-end;
             gap: 8px;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #ddd;
+            border-radius: 0 0 8px 8px;
         }
-
         button {
-            padding: 6px 32px;
+            min-width: 90px;
+            padding: 6px 12px;
             border-radius: 4px;
             font-size: 14px;
             cursor: pointer;
-            transition: 0.1s;
+            border: 1px solid #ccc;
         }
-
-        .btn-yes {
-            background: #0067c0;
-            color: white;
-            border: none;
-        }
-
+        .btn-yes { background: var(--win-blue); color: white; border: none; font-weight: 500; }
         .btn-yes:hover { background: #005aab; }
-
-        .btn-no {
-            background: #ffffff;
-            color: black;
-            border: 1px solid #cccccc;
-        }
-
-        .btn-no:hover { background: #f5f5f5; }
-
-        .details-link {
-            font-size: 12px;
-            color: #0067c0;
-            text-decoration: none;
-            margin-top: 15px;
-            display: block;
-        }
+        .btn-no { background: #fff; color: #000; }
+        .btn-no:hover { background: #f9f9f9; }
     </style>
 </head>
 <body>
 
-<div class="uac-dialog">
+<div class="uac-window">
     <div class="header">
-        <div class="uac-title">
-            <span class="uac-icon">🛡️</span>
-            ユーザー アカウント制御
-        </div>
+        <span class="shield-icon">🛡️</span>
+        ユーザー アカウント制御
     </div>
-
-    <div class="content">
-        <div class="question">このアプリがデバイスに変更を加えることを許可しますか?</div>
-        
-        <div class="app-info">
-            <div class="app-icon">🃏</div>
-            <div class="app-details">
-                <div class="app-name">Joke Generator v2.0</div>
-                <div>確認済みの発行元: あなたの遊び心</div>
-                <div>ファイルの入手先: この会話のノリ</div>
+    <div class="main-content">
+        <div class="headline">このアプリがデバイスに変更を加えることを許可しますか?</div>
+        <div class="app-card">
+            <div class="app-icon">🤖</div>
+            <div class="app-text">
+                <div class="app-name">AI Assistant Pro</div>
+                <div>確認済みの発行元: OpenAI/Google/Microsoft/You</div>
+                <div>ファイルの入手先: このハード ドライブ上の場所</div>
             </div>
         </div>
-
-        <div class="password-section">
-            <div class="admin-user">
-                <div class="user-icon"></div>
-                <strong>Administrator</strong>
+        <div class="auth-section">
+            <div class="user-info"><div class="avatar"></div><strong>Admin User</strong></div>
+            <div class="input-wrapper">
+                <input type="password" placeholder="パスワード">
             </div>
-            <input type="password" placeholder="パスワードを入力してください">
         </div>
-
-        <a href="#" class="details-link">詳細を表示</a>
+        <a href="#" class="more-choices">詳細を表示</a>
     </div>
-
     <div class="footer">
-        <button class="btn-yes" onclick="alert('承認されました！さあ、次のジョークへ進みましょう。')">はい</button>
-        <button class="btn-no" onclick="alert('拒否されましたが、口答え禁止なので無効です。')">いいえ</button>
+        <button class="btn-yes">はい</button>
+        <button class="btn-no">いいえ</button>
     </div>
 </div>
 
